@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 12, 22, 24;  /* Very dark cyan/black text */
+  --background-rgb: 242, 244, 243;  /* Light gray/white background */
+  --primary: 12, 22, 24;  /* Very dark cyan/black */
+  --mint: 73, 17, 28;  /* Deep red */
+  --coral: 73, 17, 28;  /* Deep red */
+}
+
+.dark {
+  --foreground-rgb: 242, 244, 243;  /* Light gray/white text for dark mode */
+  --background-rgb: 12, 22, 24;  /* Very dark background */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Link styles */
+a {
+  color: rgb(var(--mint));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+}
+
+.dark a {
+  color: rgb(var(--coral));
+}
+
+a:hover {
+  text-underline-offset: 4px;
+  opacity: 0.8;
+}
+
+/* Custom loading animation for image processing */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-custom {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background dark:bg-dark-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/60 dark:bg-primary/40;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-mint dark:bg-coral;
+}
+
+/* Image hover effects */
+.image-hover {
+  transition: transform 0.3s ease;
+}
+
+.image-hover:hover {
+  transform: scale(1.02);
+  @apply shadow-lg border-2 border-mint dark:border-coral;
+}
+
+/* Button hover animation */
+.btn-hover {
+  transition: all 0.3s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-2px);
+  @apply shadow-lg border-2 border-mint dark:border-coral;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-primary/20 dark:bg-primary/40 text-text dark:text-dark-text;
+}
+
+/* Theme transition */
+* {
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
