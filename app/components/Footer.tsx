@@ -68,9 +68,9 @@ export default function Footer() {
 
         {/* Privacy & Data Handling */}
         <div className="bg-white/10 dark:bg-dark-background/40 rounded-lg p-4 mt-8">
-          <h4 className="font-semibold mb-2 text-white dark:text-white/90">Privacy & Data Handling</h4>
+          <h4 className="font-semibold mb-2 text-white dark:text-white/90">Privacy &amp; Data Handling</h4>
           <p className="text-sm text-white/90 dark:text-white/80">
-            PicShifter processes your images in real-time without storing any data. Your uploads are automatically deleted after processing, ensuring complete privacy and security. We don't use cookies or track your usage.
+            PicShifter processes your images in real-time without storing any data. Your uploads are automatically deleted after processing, ensuring complete privacy and security. We don&apos;t use cookies or track your usage.
           </p>
         </div>
 

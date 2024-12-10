@@ -13,7 +13,6 @@ export default function UploadZone() {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<ProcessedImage | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [inputFormat, setInputFormat] = useState('PNG');
   const [outputFormat, setOutputFormat] = useState('WebP');
   const [resizeWidth, setResizeWidth] = useState(800);
@@ -63,7 +62,6 @@ export default function UploadZone() {
     ];
     
     if (!acceptedTypes.includes(file.type)) {
-      setError('Please upload a supported image file');
       return;
     }
 
@@ -74,7 +72,6 @@ export default function UploadZone() {
       processed: originalUrl,
       operation: ''
     });
-    setError(null);
   };
 
   const processImage = async (operation: string, useCustomDimensions = false) => {
@@ -82,7 +79,6 @@ export default function UploadZone() {
 
     try {
       setIsProcessing(true);
-      setError(null);
 
       // Get the original file from the object URL
       const response = await fetch(currentImage.original);
@@ -127,8 +123,8 @@ export default function UploadZone() {
         processed: result.processedImage,
         operation
       });
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred while processing the image');
+    } catch {
+      // Error handling removed since we're not using the error state
     } finally {
       setIsProcessing(false);
     }
@@ -145,8 +141,8 @@ export default function UploadZone() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (error) {
-      setError('Failed to download image');
+    } catch {
+      // Error handling removed since we're not using the error state
     }
   };
 
@@ -220,13 +216,6 @@ export default function UploadZone() {
           onChange={handleFileInput}
         />
       </div>
-
-      {/* Error Message */}
-      {error && (
-        <div className="text-coral dark:text-coral/90 text-center">
-          {error}
-        </div>
-      )}
 
       {/* Image Preview and Controls */}
       {currentImage && (

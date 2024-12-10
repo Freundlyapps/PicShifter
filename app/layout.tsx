@@ -3,6 +3,7 @@ import ThemeProvider from './components/ThemeProvider';
 import Script from 'next/script';
 
 export const metadata = {
+  metadataBase: new URL('https://picshifter.vercel.app'),
   title: 'Convert, Resize, and Optimize Images Online | PicShifter',
   description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
   keywords: 'image converter, image resize, online image optimization, PicShifter, image processing, free image tools',
