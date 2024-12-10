@@ -127,8 +127,8 @@ export default function UploadZone() {
         processed: result.processedImage,
         operation
       });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process image');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred while processing the image');
     } finally {
       setIsProcessing(false);
     }
@@ -145,7 +145,7 @@ export default function UploadZone() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err) {
+    } catch (error) {
       setError('Failed to download image');
     }
   };
