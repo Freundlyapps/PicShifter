@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
+import FAQ from './components/FAQ';
 import UploadZone from './components/UploadZone';
 import Features from './components/Features';
 import Footer from './components/Footer';
@@ -8,6 +9,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col bg-background dark:bg-dark-background">
       <Header />
+      <FAQ />
       
       <section id="upload-section" className="flex-grow py-12 bg-background dark:bg-dark-background">
         <div className="container mx-auto px-4">
