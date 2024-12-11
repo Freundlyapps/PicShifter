@@ -152,7 +152,7 @@ export default function UploadZone() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="inputFormat" className="block text-sm font-medium text-text dark:text-dark-text">
-            Input Format
+            Input 
           </label>
           <select
             id="inputFormat"
@@ -171,7 +171,7 @@ export default function UploadZone() {
         </div>
         <div className="space-y-2">
           <label htmlFor="outputFormat" className="block text-sm font-medium text-text dark:text-dark-text">
-            Output Format
+            Output 
           </label>
           <select
             id="outputFormat"
