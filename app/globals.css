@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 12, 22, 24;  /* Very dark cyan/black text */
-  --background-rgb: 242, 244, 243;  /* Light gray/white background */
-  --primary: 12, 22, 24;  /* Very dark cyan/black */
-  --mint: 73, 17, 28;  /* Deep red */
-  --coral: 73, 17, 28;  /* Deep red */
+  --foreground-rgb: 43, 65, 98;    /* #2b4162 Deep blue text */
+  --background-rgb: 255, 248, 240;  /* #fff8f0 Light cream background */
+  --primary: 43, 65, 98;           /* #2b4162 Deep blue */
+  --mint: 255, 136, 17;            /* #ff8811 Bright orange */
+  --coral: 244, 208, 111;          /* #f4d06f Muted yellow */
 }
 
 .dark {
-  --foreground-rgb: 242, 244, 243;  /* Light gray/white text for dark mode */
-  --background-rgb: 12, 22, 24;  /* Very dark background */
+  --foreground-rgb: 255, 248, 240;  /* #fff8f0 Light cream text for dark mode */
+  --background-rgb: 26, 40, 56;     /* #1a2838 Darker variation of primary blue */
 }
 
 html {

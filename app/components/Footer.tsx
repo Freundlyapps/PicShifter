@@ -31,13 +31,13 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-primary dark:bg-dark-background border-t dark:border-primary/20 text-white">
+    <footer className="bg-[#0b132b] dark:bg-dark-background border-t dark:border-primary/20">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="col-span-1">
-            <h3 className="text-2xl font-bold mb-4 text-white dark:text-white">PicShifter</h3>
-            <p className="text-white/95 dark:text-white/80 mb-4">
+            <h3 className="text-2xl font-bold mb-4 text-white dark:text-dark-text">PicShifter</h3>
+            <p className="text-white dark:text-dark-text mb-4">
               Convert and enhance your images with our powerful processing tools.
               Fast, easy, and free image processing for everyone.
             </p>
@@ -46,7 +46,7 @@ export default function Footer() {
           {/* Links Sections */}
           {sections.map((section) => (
             <div key={section.title}>
-              <h4 className="text-lg font-semibold mb-4 text-white dark:text-white/95">
+              <h4 className="text-lg font-semibold mb-4 text-white dark:text-dark-text">
                 {section.title}
               </h4>
               <ul className="space-y-2">
@@ -54,7 +54,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/90 dark:text-white/80 hover:text-mint dark:hover:text-mint/90 
+                      className="text-white dark:text-dark-text hover:text-mint dark:hover:text-mint/90 
                                transition-colors duration-200"
                     >
                       {link.name}
@@ -67,20 +67,20 @@ export default function Footer() {
         </div>
 
         {/* Privacy & Data Handling */}
-        <div className="bg-white/10 dark:bg-dark-background/40 rounded-lg p-4 mt-8">
-          <h4 className="font-semibold mb-2 text-white dark:text-white/90">Privacy &amp; Data Handling</h4>
-          <p className="text-sm text-white/90 dark:text-white/80">
+        <div className="bg-primary/10 dark:bg-dark-background/40 rounded-lg p-4 mt-8">
+          <h4 className="font-semibold mb-2 text-white dark:text-dark-text">Privacy &amp; Data Handling</h4>
+          <p className="text-sm text-white dark:text-dark-text">
             PicShifter processes your images in real-time without storing any data. Your uploads are automatically deleted after processing, ensuring complete privacy and security. We don&apos;t use cookies or track your usage.
           </p>
         </div>
 
         {/* Copyright & Trust Badge */}
-        <div className="border-t border-white/30 dark:border-white/20 mt-8 pt-8">
+        <div className="border-t border-primary/20 dark:border-primary/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/95 dark:text-white/90">
+            <p className="text-white dark:text-dark-text">
               © {currentYear} PicShifter. All rights reserved.
             </p>
-            <div className="flex items-center text-sm text-white/90 dark:text-white/80">
+            <div className="flex items-center text-sm text-white dark:text-dark-text">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>

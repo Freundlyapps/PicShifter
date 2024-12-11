@@ -26,10 +26,10 @@ export default function FAQ() {
             className="bg-primary/10 dark:bg-dark-background/40 backdrop-blur-sm rounded-lg p-6 
                        hover:bg-primary/20 dark:hover:bg-dark-background/60 transition-colors duration-200"
           >
-            <h3 className="font-semibold text-lg mb-2 text-primary dark:text-white/90">
+            <h3 className="font-semibold text-lg mb-2 text-text dark:text-white">
               {faq.question}
             </h3>
-            <p className="text-gray-700 dark:text-white/80">
+            <p className="text-text dark:text-white">
               {faq.answer}
             </p>
           </div>

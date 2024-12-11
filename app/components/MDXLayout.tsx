@@ -8,7 +8,7 @@ interface MDXLayoutProps {
 export default function MDXLayout({ children }: MDXLayoutProps) {
   return (
     <main 
-      className="min-h-screen bg-white dark:bg-gray-900"
+      className="min-h-screen bg-background dark:bg-dark-background"
       itemScope 
       itemType="http://schema.org/WebPage"
     >
@@ -37,7 +37,7 @@ export default function MDXLayout({ children }: MDXLayoutProps) {
           </Link>
         </div>
         <article 
-          className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-white prose-p:text-gray-300 prose-a:text-mint hover:prose-a:text-mint/80 prose-strong:text-white prose-ul:text-gray-300"
+          className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-text dark:prose-headings:text-white prose-p:text-text dark:prose-p:text-white prose-a:text-mint hover:prose-a:text-mint/80 prose-strong:text-text dark:prose-strong:text-white prose-ul:text-text dark:prose-ul:text-white prose-ol:text-text dark:prose-ol:text-white prose-li:text-text dark:prose-li:text-white"
           itemProp="mainEntity" 
           itemScope 
           itemType="http://schema.org/Article"

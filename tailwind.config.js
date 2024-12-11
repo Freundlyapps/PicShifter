@@ -8,19 +8,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#0c1618',    // Very dark cyan/black for primary elements
-        mint: '#49111c',       // Deep red for hover/accent
-        coral: '#49111c',      // Deep red for hover/accent
-        background: '#f2f4f3', // Light gray/white background
-        text: '#0c1618',       // Very dark text
-        divider: '#f2e9e4',    // Light pink/white for dividers
+        primary: '#2b4162',    // Deep blue for primary elements
+        mint: '#ff8811',       // Bright orange for primary accent
+        coral: '#f4d06f',      // Muted yellow for secondary accent
+        background: '#fff8f0', // Light cream background
+        text: '#2b4162',       // Deep blue text
+        divider: '#f4d06f',    // Muted yellow for dividers
         dark: {
-          background: '#0c1618',
-          text: '#f2f4f3',
-          divider: '#49111c'
+          background: '#1a2838', // Darker variation of primary blue
+          text: '#fff8f0',      // Light cream text for dark mode
+          divider: '#f4d06f'    // Keeping muted yellow for dividers
         }
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
