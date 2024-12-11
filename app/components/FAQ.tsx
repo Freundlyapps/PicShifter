@@ -4,15 +4,15 @@ import React from 'react';
 export default function FAQ() {
   const faqs = [
     {
-      question: "What image formats are supported?",
-      answer: "We support PNG, JPEG, WebP, AVIF, TFF and SVG formats"
+      question: "",
+      answer: "Convert PNG, JPEG, WebP, AVIF, TFF and SVG formats"
     },
     {
-      question: "Is there a file size limit?",
-      answer: "Yes, maximum file size is 10MB per image"
+      question: "",
+      answer: "Maximum file size is 10MB per image"
     },
     {
-      question: "How many images can I process?",
+      question: "",
       answer: "Process unlimited images, one at a time"
     }
   ];
