@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface ProcessedImage {
   original: string;
@@ -255,12 +256,15 @@ export default function UploadZone() {
                 Original ({inputFormat})
               </h3>
               <div className="border rounded-lg overflow-hidden border-divider dark:border-dark-divider">
-                <img
-                  src={currentImage.original}
-                  alt="Original"
-                  className="w-full h-auto"
-                  style={{ objectFit: 'contain' }}
-                />
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={currentImage.original}
+                    alt="Original"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    unoptimized
+                  />
+                </div>
               </div>
             </div>
 
@@ -270,33 +274,36 @@ export default function UploadZone() {
                 Processed ({outputFormat})
               </h3>
               <div className="relative border rounded-lg overflow-hidden border-divider dark:border-dark-divider group">
-                <img
-                  src={currentImage.preview}
-                  alt="Processed"
-                  className="w-full h-auto"
-                  style={{ objectFit: 'contain' }}
-                />
-                <div 
-                  onClick={handleDownload}
-                  className="absolute inset-0 bg-primary/80 dark:bg-primary/70 opacity-0 
-                           group-hover:opacity-100 transition-opacity duration-200 
-                           flex flex-col items-center justify-center cursor-pointer"
-                >
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="h-12 w-12 text-white mb-2" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={currentImage.preview}
+                    alt="Processed"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    unoptimized
+                  />
+                  <div 
+                    onClick={handleDownload}
+                    className="absolute inset-0 bg-primary/80 dark:bg-primary/70 opacity-0 
+                             group-hover:opacity-100 transition-opacity duration-200 
+                             flex flex-col items-center justify-center cursor-pointer"
                   >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" 
-                    />
-                  </svg>
-                  <span className="text-white font-medium">Download Image</span>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className="h-12 w-12 text-white mb-2" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" 
+                      />
+                    </svg>
+                    <span className="text-white font-medium">Download Image</span>
+                  </div>
                 </div>
               </div>
             </div>

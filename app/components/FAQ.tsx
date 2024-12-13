@@ -5,7 +5,7 @@ export default function FAQ() {
   const faqs = [
     {
       question: "",
-      answer: "Convert PNG, JPEG, WebP, AVIF, TFF and SVG formats"
+      answer: "Convert PNG, JPEG, WebP, AVIF and TFF formats"
     },
     {
       question: "",

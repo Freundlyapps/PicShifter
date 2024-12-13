@@ -65,13 +65,12 @@ export async function POST(request: Request) {
 
     // Create a clone of the processed image for preview
     const processedBuffer = await processedImage.clone().toBuffer();
-    let previewBuffer: Buffer;
-    let processedOutputBuffer: Buffer;
-
-    // Generate preview image (always PNG for web compatibility)
-    previewBuffer = await sharp(processedBuffer)
+    const previewBuffer = await sharp(processedBuffer)
       .png({ compressionLevel: 9 })
       .toBuffer();
+
+    // Generate the actual output in requested format
+    let processedOutputBuffer: Buffer;
 
     // Generate the actual output in requested format
     if (outputFormat === 'tiff') {
@@ -82,7 +81,7 @@ export async function POST(request: Request) {
           resolutionUnit: 'inch',
           xres: 300,
           yres: 300,
-          bitdepth: 8 as 8
+          bitdepth: 8
         })
         .toBuffer();
     } else if (outputFormat === 'jpeg') {
