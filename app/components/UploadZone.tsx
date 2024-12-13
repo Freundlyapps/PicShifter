@@ -74,6 +74,36 @@ export default function UploadZone() {
     }
   };
 
+  const generatePreview = async (file: File): Promise<string> => {
+    // For TIFF files, we need to convert to a preview-friendly format first
+    if (file.type === 'image/tiff') {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('operation', 'preview');
+      formData.append('outputFormat', 'jpeg');
+
+      try {
+        const response = await fetch('/api/process-image', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to generate preview');
+        }
+
+        const result = await response.json();
+        return result.previewImage;
+      } catch (error) {
+        console.error('Preview generation error:', error);
+        return URL.createObjectURL(file); // Fallback to direct URL
+      }
+    }
+
+    // For other formats, use direct URL
+    return URL.createObjectURL(file);
+  };
+
   const handleFiles = async (files: File[]) => {
     const file = files[0];
     const acceptedTypes = [
@@ -88,15 +118,24 @@ export default function UploadZone() {
       return;
     }
 
+    setIsProcessing(true);
     setInputFormat(getFormatFromMimeType(file.type));
 
-    const originalUrl = URL.createObjectURL(file);
-    setCurrentImage({
-      original: originalUrl,
-      processed: originalUrl,
-      preview: originalUrl,
-      operation: ''
-    });
+    try {
+      const previewUrl = await generatePreview(file);
+      const originalUrl = URL.createObjectURL(file);
+
+      setCurrentImage({
+        original: originalUrl,
+        processed: originalUrl,
+        preview: previewUrl,
+        operation: ''
+      });
+    } catch (error) {
+      console.error('File handling error:', error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const processImage = async (operation: string, useCustomDimensions = false) => {
@@ -258,7 +297,7 @@ export default function UploadZone() {
               <div className="border rounded-lg overflow-hidden border-divider dark:border-dark-divider">
                 <div className="relative w-full aspect-square">
                   <Image
-                    src={currentImage.original}
+                    src={currentImage.preview} // Use preview URL for display
                     alt="Original"
                     fill
                     style={{ objectFit: 'contain' }}
