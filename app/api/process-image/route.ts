@@ -3,6 +3,11 @@ import sharp from 'sharp';
 
 type OutputFormat = 'png' | 'jpeg' | 'webp' | 'avif' | 'tiff' | 'svg';
 
+const isSvgContent = (buffer: Buffer): boolean => {
+  const content = buffer.toString().trim().toLowerCase();
+  return content.startsWith('<?xml') || content.startsWith('<svg');
+};
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -10,7 +15,6 @@ export async function POST(request: Request) {
     const operation = formData.get('operation') as string;
     const outputFormat = (formData.get('outputFormat') as string || 'webp').toLowerCase() as OutputFormat;
     
-    // Get resize dimensions if provided
     const width = formData.get('width') ? parseInt(formData.get('width') as string) : undefined;
     const height = formData.get('height') ? parseInt(formData.get('height') as string) : undefined;
     
@@ -22,12 +26,17 @@ export async function POST(request: Request) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
+    const isInputSvg = file.name.toLowerCase().endsWith('.svg') || isSvgContent(buffer);
+
+    if (isInputSvg && outputFormat === 'svg' && operation === 'convert') {
+      return NextResponse.json({
+        success: true,
+        processedImage: `data:image/svg+xml;base64,${buffer.toString('base64')}`,
+        previewImage: `data:image/svg+xml;base64,${buffer.toString('base64')}`
+      });
+    }
+
     let processedImage = sharp(buffer);
-
-    // Handle input formats
-    const isInputSvg = file.name.toLowerCase().endsWith('.svg');
-
-    // Convert SVG to PNG for processing
     if (isInputSvg) {
       processedImage = sharp(await processedImage.png().toBuffer());
     }
@@ -51,80 +60,55 @@ export async function POST(request: Request) {
         break;
 
       default:
-        // If no operation specified, just convert format
         break;
     }
 
-    // Set output format options based on format
-    let formatOptions = {};
-    switch (outputFormat) {
-      case 'jpeg':
-        formatOptions = { quality: 85 };
-        break;
-      case 'webp':
-        formatOptions = { quality: 85 };
-        break;
-      case 'avif':
-        formatOptions = { quality: 85 };
-        break;
-      case 'png':
-        formatOptions = { compressionLevel: 9 };
-        break;
-      case 'tiff':
-        formatOptions = { 
+    // Create a clone of the processed image for preview
+    const processedBuffer = await processedImage.clone().toBuffer();
+    let previewBuffer: Buffer;
+    let processedOutputBuffer: Buffer;
+
+    // Generate preview image (always PNG for web compatibility)
+    previewBuffer = await sharp(processedBuffer)
+      .png({ compressionLevel: 9 })
+      .toBuffer();
+
+    // Generate the actual output in requested format
+    if (outputFormat === 'tiff') {
+      processedOutputBuffer = await sharp(processedBuffer)
+        .tiff({
           compression: 'lzw',
           quality: 100,
-          squash: false,
           resolutionUnit: 'inch',
           xres: 300,
-          yres: 300
-        };
-        break;
-    }
-
-    // Convert to the requested format with appropriate options
-    let processedBuffer: Buffer;
-    
-    // If output format is SVG, keep as PNG
-    if (outputFormat === 'svg') {
-      processedBuffer = await processedImage.png(formatOptions).toBuffer();
-    } 
-    // Special handling for TIFF output
-    else if (outputFormat === 'tiff') {
-      // First convert to PNG to ensure proper processing
-      const pngBuffer = await processedImage.png().toBuffer();
-      
-      // Then convert to TIFF with proper options
-      processedBuffer = await sharp(pngBuffer)
-        .tiff({
-          ...formatOptions,
-          bitdepth: 8,  // Ensure 8-bit depth for better compatibility
-          tile: false,  // Disable tiling for better compatibility
-          pyramid: false  // Disable pyramid for better compatibility
+          yres: 300,
+          bitdepth: 8 as 8
         })
         .toBuffer();
-    }
-    else {
-      switch (outputFormat) {
-        case 'png':
-          processedBuffer = await processedImage.png(formatOptions).toBuffer();
-          break;
-        case 'jpeg':
-          processedBuffer = await processedImage.jpeg(formatOptions).toBuffer();
-          break;
-        case 'webp':
-          processedBuffer = await processedImage.webp(formatOptions).toBuffer();
-          break;
-        case 'avif':
-          processedBuffer = await processedImage.avif(formatOptions).toBuffer();
-          break;
-        default:
-          processedBuffer = await processedImage.webp(formatOptions).toBuffer();
-      }
+    } else if (outputFormat === 'jpeg') {
+      processedOutputBuffer = await sharp(processedBuffer)
+        .jpeg({ quality: 85 })
+        .toBuffer();
+    } else if (outputFormat === 'webp') {
+      processedOutputBuffer = await sharp(processedBuffer)
+        .webp({ quality: 85 })
+        .toBuffer();
+    } else if (outputFormat === 'avif') {
+      processedOutputBuffer = await sharp(processedBuffer)
+        .avif({ quality: 85 })
+        .toBuffer();
+    } else if (outputFormat === 'png') {
+      processedOutputBuffer = await sharp(processedBuffer)
+        .png({ compressionLevel: 9 })
+        .toBuffer();
+    } else {
+      // Default to PNG if format not supported
+      processedOutputBuffer = await sharp(processedBuffer)
+        .png({ compressionLevel: 9 })
+        .toBuffer();
     }
 
-    // Convert processed buffer to base64
-    const base64Image = processedBuffer.toString('base64');
+    // Get the appropriate MIME types
     const mimeTypes = {
       png: 'image/png',
       jpeg: 'image/jpeg',
@@ -134,13 +118,12 @@ export async function POST(request: Request) {
       svg: 'image/svg+xml'
     };
     
-    // For SVG output, use PNG mime type since we kept it as PNG
-    const contentType = outputFormat === 'svg' ? mimeTypes.png : mimeTypes[outputFormat];
-    const dataUrl = `data:${contentType};base64,${base64Image}`;
-
+    const contentType = mimeTypes[outputFormat];
+    
     return NextResponse.json({ 
       success: true,
-      processedImage: dataUrl
+      processedImage: `data:${contentType};base64,${processedOutputBuffer.toString('base64')}`,
+      previewImage: `data:image/png;base64,${previewBuffer.toString('base64')}`
     });
 
   } catch (error) {

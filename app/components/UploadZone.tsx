@@ -4,10 +4,33 @@ import React, { useState } from 'react';
 interface ProcessedImage {
   original: string;
   processed: string;
+  preview: string;
   operation: string;
 }
 
-const supportedFormats = ['PNG', 'JPEG', 'WebP', 'AVIF', 'TIFF', 'SVG'];
+const supportedFormats = ['PNG', 'JPEG', 'WebP', 'AVIF', 'TIFF'];
+
+const getMimeType = (format: string): string => {
+  const mimeTypes: { [key: string]: string } = {
+    'PNG': 'image/png',
+    'JPEG': 'image/jpeg',
+    'WebP': 'image/webp',
+    'AVIF': 'image/avif',
+    'TIFF': 'image/tiff'
+  };
+  return mimeTypes[format] || 'image/png';
+};
+
+const getFormatFromMimeType = (mimeType: string): string => {
+  const formatMap: { [key: string]: string } = {
+    'image/png': 'PNG',
+    'image/jpeg': 'JPEG',
+    'image/webp': 'WebP',
+    'image/avif': 'AVIF',
+    'image/tiff': 'TIFF'
+  };
+  return formatMap[mimeType] || 'PNG';
+};
 
 export default function UploadZone() {
   const [isDragging, setIsDragging] = useState(false);
@@ -57,19 +80,20 @@ export default function UploadZone() {
       'image/jpeg', 
       'image/webp', 
       'image/avif', 
-      'image/tiff',
-      'image/svg+xml'
+      'image/tiff'
     ];
     
     if (!acceptedTypes.includes(file.type)) {
       return;
     }
 
-    // Create object URL for original image
+    setInputFormat(getFormatFromMimeType(file.type));
+
     const originalUrl = URL.createObjectURL(file);
     setCurrentImage({
       original: originalUrl,
       processed: originalUrl,
+      preview: originalUrl,
       operation: ''
     });
   };
@@ -80,29 +104,19 @@ export default function UploadZone() {
     try {
       setIsProcessing(true);
 
-      // Get the original file from the object URL
       const response = await fetch(currentImage.original);
       const blob = await response.blob();
 
-      // Create form data
       const formData = new FormData();
       formData.append('file', blob);
       formData.append('operation', operation);
-      formData.append('inputFormat', inputFormat.toLowerCase());
       formData.append('outputFormat', outputFormat.toLowerCase());
       
-      // Add resize dimensions if it's a resize operation
-      if (operation === 'resize') {
-        if (useCustomDimensions) {
-          formData.append('width', resizeWidth.toString());
-          formData.append('height', resizeHeight.toString());
-        } else {
-          formData.append('width', '800');
-          formData.append('height', '600');
-        }
+      if (operation === 'resize' && useCustomDimensions) {
+        formData.append('width', resizeWidth.toString());
+        formData.append('height', resizeHeight.toString());
       }
 
-      // Send to API
       const processResponse = await fetch('/api/process-image', {
         method: 'POST',
         body: formData,
@@ -121,28 +135,42 @@ export default function UploadZone() {
       setCurrentImage({
         ...currentImage,
         processed: result.processedImage,
+        preview: result.previewImage || result.processedImage,
         operation
       });
-    } catch {
-      // Error handling removed since we're not using the error state
+
+    } catch (error) {
+      console.error('Processing error:', error);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!currentImage?.processed) return;
     
     try {
-      // Create a link element
+      const mimeType = getMimeType(outputFormat);
+      const base64Data = currentImage.processed.split(',')[1];
+      const binaryData = atob(base64Data);
+      const uint8Array = new Uint8Array(binaryData.length);
+      
+      for (let i = 0; i < binaryData.length; i++) {
+        uint8Array[i] = binaryData.charCodeAt(i);
+      }
+      
+      const processedBlob = new Blob([uint8Array], { type: mimeType });
+      const url = URL.createObjectURL(processedBlob);
+      
       const link = document.createElement('a');
-      link.href = currentImage.processed; // The data URL from the API
-      link.download = `processed-image.${outputFormat.toLowerCase()}`; // Set the filename
+      link.href = url;
+      link.download = `processed-image.${outputFormat.toLowerCase()}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch {
-      // Error handling removed since we're not using the error state
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download error:', error);
     }
   };
 
@@ -231,6 +259,7 @@ export default function UploadZone() {
                   src={currentImage.original}
                   alt="Original"
                   className="w-full h-auto"
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
             </div>
@@ -242,9 +271,10 @@ export default function UploadZone() {
               </h3>
               <div className="relative border rounded-lg overflow-hidden border-divider dark:border-dark-divider group">
                 <img
-                  src={currentImage.processed}
+                  src={currentImage.preview}
                   alt="Processed"
                   className="w-full h-auto"
+                  style={{ objectFit: 'contain' }}
                 />
                 <div 
                   onClick={handleDownload}
