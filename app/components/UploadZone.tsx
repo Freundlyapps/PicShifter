@@ -297,7 +297,7 @@ export default function UploadZone() {
               <div className="border rounded-lg overflow-hidden border-divider dark:border-dark-divider">
                 <div className="relative w-full aspect-square">
                   <Image
-                    src={currentImage.preview} // Use preview URL for display
+                    src={currentImage.original} // Use original URL for the original image
                     alt="Original"
                     fill
                     style={{ objectFit: 'contain' }}
@@ -315,7 +315,7 @@ export default function UploadZone() {
               <div className="relative border rounded-lg overflow-hidden border-divider dark:border-dark-divider group">
                 <div className="relative w-full aspect-square">
                   <Image
-                    src={currentImage.preview}
+                    src={currentImage.processed} // Use processed URL for the processed image
                     alt="Processed"
                     fill
                     style={{ objectFit: 'contain' }}
@@ -350,21 +350,8 @@ export default function UploadZone() {
 
           {/* Operation Controls */}
           <div className="flex flex-wrap gap-2 justify-center">
-            {/* Convert Format Button */}
-            <button
-              onClick={() => processImage('convert')}
-              disabled={isProcessing}
-              className={`px-4 py-2 rounded-md text-white transition-colors
-                ${isProcessing 
-                  ? 'bg-divider dark:bg-dark-divider cursor-not-allowed'
-                  : 'bg-mint hover:bg-mint/90 dark:hover:bg-mint/80'
-                }`}
-            >
-              Convert Format
-            </button>
-
             {/* Optional Operations */}
-            <div className="w-full flex flex-wrap gap-2 justify-center mt-4">
+            <div className="w-full flex flex-wrap gap-2 justify-center">
               <p className="w-full text-center text-sm text-text dark:text-dark-text opacity-70">
                 Optional Effects
               </p>
