@@ -3,7 +3,7 @@ import ThemeProvider from './components/ThemeProvider';
 import Script from 'next/script';
 
 export const metadata = {
-  metadataBase: new URL('https://picshifter.vercel.app'),
+  metadataBase: new URL('https://picshifter.com'),
   title: 'Convert, Resize, and Optimize Images Online | PicShifter',
   description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
   keywords: 'image converter, image resize, online image optimization, PicShifter, image processing, free image tools',
@@ -11,7 +11,7 @@ export const metadata = {
     title: 'Convert, Resize, and Optimize Images Online | PicShifter',
     description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
     type: 'website',
-    url: 'https://picshifter.vercel.app',
+    url: 'https://picshifter.com',
     images: [
       {
         url: '/og-image.png',
@@ -47,7 +47,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "PicShifter",
-              "url": "https://picshifter.vercel.app",
+              "url": "https://picshifter.com",
               "description": "Convert, resize, grayscale, and blur your images online for free with PicShifter.",
               "applicationCategory": "Image Processing Tool",
               "operatingSystem": "Any",
