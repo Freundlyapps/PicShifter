@@ -190,17 +190,11 @@ export default function UploadZone() {
     if (!currentImage?.processed) return;
     
     try {
-      const mimeType = getMimeType(outputFormat);
-      const base64Data = currentImage.processed.split(',')[1];
-      const binaryData = atob(base64Data);
-      const uint8Array = new Uint8Array(binaryData.length);
+      const response = await fetch(currentImage.processed);
+      if (!response.ok) throw new Error('Failed to fetch processed image');
       
-      for (let i = 0; i < binaryData.length; i++) {
-        uint8Array[i] = binaryData.charCodeAt(i);
-      }
-      
-      const processedBlob = new Blob([uint8Array], { type: mimeType });
-      const url = URL.createObjectURL(processedBlob);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       
       const link = document.createElement('a');
       link.href = url;
