@@ -43,7 +43,7 @@ export default function OptimizePage() {
         
         <div className="prose dark:prose-invert max-w-none mb-8">
           <p className="text-lg text-center mb-8">
-            PicShifter's Free Online Image Optimizer helps you compress images intelligently while maintaining quality. 
+            PicShifter&apos;s Free Online Image Optimizer helps you compress images intelligently while maintaining quality. 
             optimize images with customizable quality settings. 
             Perfect for web images, email attachments, and social media uploads.
             

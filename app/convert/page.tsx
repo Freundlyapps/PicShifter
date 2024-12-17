@@ -10,6 +10,12 @@ interface PreviewImage {
   height: number;
 }
 
+interface WindowWithImage extends Window {
+  Image: {
+    new(): HTMLImageElement;
+  }
+}
+
 export default function ImageConverter() {
   const [originalImage, setOriginalImage] = useState<PreviewImage | null>(null);
   const [convertedImage, setConvertedImage] = useState<PreviewImage | null>(null);
@@ -21,7 +27,7 @@ export default function ImageConverter() {
   const processImage = useCallback(async (file: File) => {
     const reader = new FileReader();
     reader.onload = async (event) => {
-      const img = new (window as any).Image() as HTMLImageElement;
+      const img = new ((window as WindowWithImage).Image)();
       img.onload = () => {
         setOriginalImage({
           url: event.target?.result as string,
@@ -79,7 +85,7 @@ export default function ImageConverter() {
         throw new Error(result.error || 'Failed to process image');
       }
 
-      const img = new (window as any).Image() as HTMLImageElement;
+      const img = new ((window as WindowWithImage).Image)();
       img.onload = () => {
         setConvertedImage({
           url: result.processedImage,

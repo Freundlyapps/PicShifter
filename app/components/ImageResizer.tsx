@@ -91,9 +91,10 @@ export default function ImageResizer() {
       const url = URL.createObjectURL(blob);
       setDownloadUrl(url);
       setMessage('Images resized successfully!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error:', error);
-      setMessage(`Error resizing images: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setMessage(`Error resizing images: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

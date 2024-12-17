@@ -43,7 +43,7 @@ export default function ResizePage() {
         
         <div className="prose dark:prose-invert max-w-none mb-8">
           <p className="text-lg text-center mb-8">
-            PicShifter's Free Online Image Resizer allows you to resize images quickly and easily. 
+            PicShifter&apos;s Free Online Image Resizer allows you to resize images quickly and easily. 
             Choose from preset sizes for social media (Facebook Cover, Instagram Post) or enter custom dimensions. 
             Resize bulk images without losing quality and download them in PNG, JPEG, WebP, or AVIF formats.
           </p>
