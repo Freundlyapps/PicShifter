@@ -9,11 +9,6 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     mdxRs: true,
-    serverComponentsExternalPackages: ['sharp', 'pdf-lib', 'pdf-parse', 'pdf-img-convert', 'pdf-poppler'],
-  },
-  webpack: (config) => {
-    config.externals = [...config.externals, 'sharp', 'pdf-lib', 'pdf-parse', 'pdf-img-convert', 'pdf-poppler'];
-    return config;
   },
   serverRuntimeConfig: {
     bodyParser: {
