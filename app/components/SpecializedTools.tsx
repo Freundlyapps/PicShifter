@@ -23,6 +23,13 @@ const tools = [
     link: '/tools/image-resizer',
     color: 'bg-purple-500',
   },
+  {
+    icon: FaImage,
+    title: 'Bulk Image Converter',
+    description: 'Convert multiple images between different formats in one go',
+    link: '/tools/image-converter',
+    color: 'bg-orange-500',
+  },
 ];
 
 export default function SpecializedTools() {
