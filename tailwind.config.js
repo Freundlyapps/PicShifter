@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#2b4162',    // Deep blue for primary elements
+        primary: '#06aed5',    // Deep blue for primary elements
         mint: '#ff8811',       // Bright orange for primary accent
         coral: '#f4d06f',      // Muted yellow for secondary accent
         background: '#fff8f0', // Light cream background

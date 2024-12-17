@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     const file = formData.get('file') as File;
     const operation = formData.get('operation') as string;
     const outputFormat = (formData.get('outputFormat') as string || 'webp').toLowerCase() as OutputFormat;
+    const quality = formData.get('quality') ? parseInt(formData.get('quality') as string) : 85;
     
     const width = formData.get('width') ? parseInt(formData.get('width') as string) : undefined;
     const height = formData.get('height') ? parseInt(formData.get('height') as string) : undefined;
@@ -32,7 +33,9 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         processedImage: `data:image/svg+xml;base64,${buffer.toString('base64')}`,
-        previewImage: `data:image/svg+xml;base64,${buffer.toString('base64')}`
+        previewImage: `data:image/svg+xml;base64,${buffer.toString('base64')}`,
+        originalSize: buffer.length,
+        processedSize: buffer.length
       });
     }
 
@@ -59,7 +62,9 @@ export async function POST(request: Request) {
         processedImage = processedImage.blur(3);
         break;
 
+      case 'optimize':
       default:
+        // No additional processing needed for optimization
         break;
     }
 
@@ -72,12 +77,12 @@ export async function POST(request: Request) {
     // Generate the actual output in requested format
     let processedOutputBuffer: Buffer;
 
-    // Generate the actual output in requested format
+    // Generate the actual output in requested format with quality setting
     if (outputFormat === 'tiff') {
       processedOutputBuffer = await sharp(processedBuffer)
         .tiff({
           compression: 'lzw',
-          quality: 100,
+          quality,
           resolutionUnit: 'inch',
           xres: 300,
           yres: 300,
@@ -86,15 +91,15 @@ export async function POST(request: Request) {
         .toBuffer();
     } else if (outputFormat === 'jpeg') {
       processedOutputBuffer = await sharp(processedBuffer)
-        .jpeg({ quality: 85 })
+        .jpeg({ quality })
         .toBuffer();
     } else if (outputFormat === 'webp') {
       processedOutputBuffer = await sharp(processedBuffer)
-        .webp({ quality: 85 })
+        .webp({ quality })
         .toBuffer();
     } else if (outputFormat === 'avif') {
       processedOutputBuffer = await sharp(processedBuffer)
-        .avif({ quality: 85 })
+        .avif({ quality })
         .toBuffer();
     } else if (outputFormat === 'png') {
       processedOutputBuffer = await sharp(processedBuffer)
@@ -122,7 +127,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       success: true,
       processedImage: `data:${contentType};base64,${processedOutputBuffer.toString('base64')}`,
-      previewImage: `data:image/png;base64,${previewBuffer.toString('base64')}`
+      previewImage: `data:image/png;base64,${previewBuffer.toString('base64')}`,
+      originalSize: buffer.length,
+      processedSize: processedOutputBuffer.length
     });
 
   } catch (error) {
