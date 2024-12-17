@@ -6,11 +6,11 @@ export default function Footer() {
   
   const sections = [
     {
-      title: 'Features',
+      title: 'Tools',
       links: [
-        { name: 'Image Resize', href: '#' },
-        { name: 'Grayscale', href: '#' },
-        { name: 'Blur Effect', href: '#' }
+        { name: 'Image Resize', href: '/resize' },
+        { name: 'Image Optimize', href: '/optimize' },
+        { name: 'PDF to Image', href: '/pdf-to-image' }
       ]
     },
     {
