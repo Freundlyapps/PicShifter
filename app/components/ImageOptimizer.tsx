@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
+import JSZip from 'jszip';
 
 interface PreviewImage {
   url: string;
@@ -10,18 +11,30 @@ interface PreviewImage {
   height: number;
 }
 
+interface OptimizedImage {
+  name: string;
+  originalSize: number;
+  optimizedSize: number;
+  originalUrl: string;
+  optimizedUrl: string;
+}
+
 export default function ImageOptimizer() {
+  const [mode, setMode] = useState<'single' | 'bulk'>('single');
   const [originalImage, setOriginalImage] = useState<PreviewImage | null>(null);
   const [optimizedImage, setOptimizedImage] = useState<PreviewImage | null>(null);
+  const [bulkImages, setBulkImages] = useState<OptimizedImage[]>([]);
   const [quality, setQuality] = useState(80);
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [totalFiles, setTotalFiles] = useState(0);
 
   const processImage = useCallback(async (file: File) => {
     const reader = new FileReader();
     reader.onload = async (event) => {
-      const img = new (window as any).Image() as HTMLImageElement;
+      const img = new window.Image();
       img.onload = () => {
         setOriginalImage({
           url: event.target?.result as string,
@@ -40,21 +53,80 @@ export default function ImageOptimizer() {
     e.preventDefault();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files[0];
-    if (!file || !file.type.startsWith('image/')) {
-      alert('Please drop an image file (JPEG, PNG, WebP, or AVIF)');
-      return;
-    }
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
 
-    await processImage(file);
-  }, [processImage]);
+    if (mode === 'single') {
+      const file = files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please drop an image file (JPEG, PNG, WebP, or AVIF)');
+        return;
+      }
+      await processImage(file);
+    } else {
+      setTotalFiles(files.length);
+      await processBulkImages(files);
+    }
+  }, [mode, processImage]);
 
   const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
-    await processImage(file);
-  }, [processImage]);
+    if (mode === 'single') {
+      await processImage(files[0]);
+    } else {
+      setTotalFiles(files.length);
+      await processBulkImages(files);
+    }
+  }, [mode, processImage]);
+
+  const processBulkImages = async (files: File[]) => {
+    setIsProcessing(true);
+    setBulkImages([]);
+    setProgress(0);
+
+    try {
+      const optimizedImages: OptimizedImage[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('operation', 'optimize');
+        formData.append('quality', quality.toString());
+        formData.append('outputFormat', 'webp');
+
+        const response = await fetch('/api/process-image', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) continue;
+
+        const result = await response.json();
+        if (result.success) {
+          optimizedImages.push({
+            name: file.name,
+            originalSize: result.originalSize,
+            optimizedSize: result.processedSize,
+            originalUrl: URL.createObjectURL(file),
+            optimizedUrl: result.processedImage,
+          });
+        }
+
+        setProgress(((i + 1) / files.length) * 100);
+      }
+
+      setBulkImages(optimizedImages);
+    } catch (error) {
+      console.error('Error processing images:', error);
+      alert('Failed to process some images. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const optimizeImage = useCallback(async () => {
     if (!currentFile) return;
@@ -80,7 +152,7 @@ export default function ImageOptimizer() {
         throw new Error(result.error || 'Failed to process image');
       }
 
-      const img = new (window as any).Image() as HTMLImageElement;
+      const img = new window.Image();
       img.onload = () => {
         setOptimizedImage({
           url: result.processedImage,
@@ -98,24 +170,99 @@ export default function ImageOptimizer() {
     }
   }, [currentFile, quality]);
 
-  const downloadOptimizedImage = useCallback(() => {
-    if (!optimizedImage) return;
-
+  const downloadOptimizedImage = useCallback((url: string, filename: string) => {
     const link = document.createElement('a');
-    link.href = optimizedImage.url;
-    link.download = 'optimized-image.webp';
+    link.href = url;
+    link.download = `optimized-${filename}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [optimizedImage]);
+  }, []);
+
+  const downloadAllImages = useCallback(async () => {
+    try {
+      const zip = new JSZip();
+      
+      // Create a folder for the optimized images
+      const folder = zip.folder("optimized-images");
+      if (!folder) throw new Error("Failed to create zip folder");
+
+      // Add each image to the zip file
+      for (const image of bulkImages) {
+        const response = await fetch(image.optimizedUrl);
+        const blob = await response.blob();
+        folder.file(`optimized-${image.name}`, blob);
+      }
+
+      // Generate and download the zip file
+      const content = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = "optimized-images.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error creating zip file:', error);
+      alert('Failed to create zip file. Please try again.');
+    }
+  }, [bulkImages]);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Mode Toggle */}
+      <div className="flex justify-center space-x-4 mb-8">
+        <button
+          onClick={() => {
+            setMode('single');
+            setBulkImages([]);
+            setOriginalImage(null);
+            setOptimizedImage(null);
+          }}
+          className={`px-4 py-2 rounded-lg ${
+            mode === 'single'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Single Image
+        </button>
+        <button
+          onClick={() => {
+            setMode('bulk');
+            setOriginalImage(null);
+            setOptimizedImage(null);
+          }}
+          className={`px-4 py-2 rounded-lg ${
+            mode === 'bulk'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Bulk Optimize
+        </button>
+      </div>
+
+      {/* Quality Slider */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center">
+          <label className="text-gray-700">Quality: {quality}%</label>
+          <input
+            type="range"
+            min="1"
+            max="100"
+            value={quality}
+            onChange={(e) => setQuality(Number(e.target.value))}
+            className="w-64"
+          />
+        </div>
+      </div>
+
       {/* Upload Zone */}
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center mb-8 transition-colors
           ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
-          ${!originalImage ? 'cursor-pointer' : ''}`}
+          ${!originalImage && bulkImages.length === 0 ? 'cursor-pointer' : ''}`}
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
@@ -123,32 +270,24 @@ export default function ImageOptimizer() {
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
       >
-        {!originalImage ? (
+        {!originalImage && bulkImages.length === 0 ? (
           <div>
-            <p className="text-gray-600 mb-4">Drag and drop an image here, or</p>
+            <p className="text-gray-600 mb-4">
+              Drag and drop {mode === 'bulk' ? 'images' : 'an image'} here, or
+            </p>
             <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600">
               Browse Files
               <input
                 type="file"
                 className="hidden"
-                accept="image/jpeg,image/png,image/webp,image/avif"
+                accept="image/*"
+                multiple={mode === 'bulk'}
                 onChange={handleFileChange}
               />
             </label>
           </div>
-        ) : (
+        ) : mode === 'single' ? (
           <div className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-gray-600">Quality: {quality}%</p>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value={quality}
-                onChange={(e) => setQuality(Number(e.target.value))}
-                className="w-64"
-              />
-            </div>
             <button
               onClick={optimizeImage}
               disabled={isProcessing}
@@ -157,11 +296,26 @@ export default function ImageOptimizer() {
               {isProcessing ? 'Processing...' : 'Optimize Image'}
             </button>
           </div>
-        )}
+        ) : null}
       </div>
 
-      {/* Preview Section */}
-      {originalImage && (
+      {/* Processing Progress */}
+      {isProcessing && mode === 'bulk' && (
+        <div className="mb-8">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          <p className="text-center mt-2 text-gray-600">
+            Processing: {Math.round(progress)}% ({Math.ceil((progress / 100) * totalFiles)} of {totalFiles} files)
+          </p>
+        </div>
+      )}
+
+      {/* Single Image Preview */}
+      {mode === 'single' && originalImage && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Original Image */}
           <div className="border rounded-lg p-4">
@@ -199,13 +353,57 @@ export default function ImageOptimizer() {
                 Dimensions: {optimizedImage.width} x {optimizedImage.height}
               </p>
               <button
-                onClick={downloadOptimizedImage}
+                onClick={() => downloadOptimizedImage(optimizedImage.url, 'image.webp')}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
               >
                 Download Optimized Image
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Bulk Images Preview */}
+      {mode === 'bulk' && bulkImages.length > 0 && (
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Optimized Images</h2>
+            <button
+              onClick={downloadAllImages}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >
+              Download All as ZIP
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {bulkImages.map((image, index) => (
+              <div key={index} className="border rounded-lg p-4">
+                <div className="relative aspect-video mb-4">
+                  <Image
+                    src={image.optimizedUrl}
+                    alt={image.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-sm text-gray-600 mb-2">{image.name}</p>
+                <p className="text-sm text-gray-600 mb-4">
+                  Original: {(image.originalSize / 1024).toFixed(2)} KB
+                  <br />
+                  Optimized: {(image.optimizedSize / 1024).toFixed(2)} KB
+                  <br />
+                  Saved:{' '}
+                  {(((image.originalSize - image.optimizedSize) / image.originalSize) * 100).toFixed(1)}%
+                </p>
+                <button
+                  onClick={() => downloadOptimizedImage(image.optimizedUrl, image.name)}
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  Download
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
