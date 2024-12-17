@@ -1,17 +1,99 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
-  return (
-    <header className="bg-gradient-to-r from-primary/90 to-mint dark:from-primary dark:to-mint/90 text-white relative">
-      {/* Theme Toggle */}
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto text-center mb-8">
+  return (
+    <header className="bg-gradient-to-r from-primary/90 to-mint dark:from-primary dark:to-mint/90 text-white">
+      <div className="container mx-auto px-4">
+        {/* Navigation Bar */}
+        <nav className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center text-background dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+            <Image
+              src="/favicon-32x32.png"
+              alt="PicShifter Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link href="/resize" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+              Resize
+            </Link>
+            <Link href="/optimize" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+              Optimize
+            </Link>
+            <Link href="/convert" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+              Convert
+            </Link>
+          </div>
+
+          {/* Right Side Controls */}
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-background dark:text-dark-text hover:text-white hover:bg-white/10 dark:hover:text-white transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile Menu */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+          <nav className="py-4 border-t border-background/20 dark:border-dark-text/20">
+            <div className="flex flex-col space-y-4">
+              <Link 
+                href="/resize" 
+                className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Resize
+              </Link>
+              <Link 
+                href="/optimize" 
+                className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Optimize
+              </Link>
+              <Link 
+                href="/convert" 
+                className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Convert
+              </Link>
+            </div>
+          </nav>
+        </div>
+
+        {/* Header Content */}
+        <div className="py-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-background dark:text-dark-text">PicShifter</h1>
           <p className="text-xl mb-4 text-background dark:text-dark-text">
             Convert and Enhance Your Images Instantly 
