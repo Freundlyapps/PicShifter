@@ -16,14 +16,23 @@ const nextConfig = {
     },
     responseLimit: '12mb',
   },
-  transpilePackages: ['canvas'],
   webpack: (config, { isServer }) => {
+    // Correctly handle the canvas module
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        canvas: false
+        canvas: false,
+        encoding: false,
       };
     }
+    
+    // Add rule for .node files
+    config.module.rules.push({
+      test: /\.node$/,
+      use: 'node-loader',
+      type: 'javascript/auto',
+    });
+
     return config;
   }
 }

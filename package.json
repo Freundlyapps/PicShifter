@@ -16,12 +16,14 @@
     "@types/archiver": "^6.0.3",
     "@types/mdx": "^2.0.13",
     "@types/node": "^20.10.5",
+    "@types/potrace": "^2.1.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@types/sharp": "^0.31.1",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.16",
     "canvas": "^2.11.2",
+    "canvg": "^4.0.2",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "jszip": "^3.10.1",
@@ -32,7 +34,9 @@
     "pdf-poppler": "^0.2.1",
     "pdfjs-dist": "^4.9.155",
     "postcss": "^8.4.32",
+    "potrace": "^2.1.8",
     "react": "^18.2.0",
+    "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.3.5",
     "react-icons": "^5.4.0",
@@ -43,6 +47,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.9.0"
+    "@netlify/plugin-nextjs": "^5.9.0",
+    "node-loader": "^2.1.0"
   }
 }

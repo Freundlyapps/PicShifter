@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaImage, FaFileImage, FaCompress } from 'react-icons/fa';
+import { FaImage, FaFileImage, FaCompress, FaVectorSquare } from 'react-icons/fa';
 
 const tools = [
   {
@@ -29,6 +29,13 @@ const tools = [
     description: 'Convert multiple images between different formats in one go',
     link: '/tools/image-converter',
     color: 'bg-orange-500',
+  },
+  {
+    icon: FaVectorSquare,
+    title: 'SVG Converter',
+    description: 'Convert images to scalable vector graphics (SVG) format',
+    link: '/tools/svg-converter',
+    color: 'bg-red-500',
   },
 ];
 
