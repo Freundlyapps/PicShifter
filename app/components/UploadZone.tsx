@@ -11,17 +11,6 @@ interface ProcessedImage {
 
 const supportedFormats = ['PNG', 'JPEG', 'WebP', 'AVIF', 'TIFF'];
 
-const getMimeType = (format: string): string => {
-  const mimeTypes: { [key: string]: string } = {
-    'PNG': 'image/png',
-    'JPEG': 'image/jpeg',
-    'WebP': 'image/webp',
-    'AVIF': 'image/avif',
-    'TIFF': 'image/tiff'
-  };
-  return mimeTypes[format] || 'image/png';
-};
-
 const getFormatFromMimeType = (mimeType: string): string => {
   const formatMap: { [key: string]: string } = {
     'image/png': 'PNG',
@@ -291,7 +280,7 @@ export default function UploadZone() {
               <div className="border rounded-lg overflow-hidden border-divider dark:border-dark-divider">
                 <div className="relative w-full aspect-square">
                   <Image
-                    src={currentImage.original} // Use original URL for the original image
+                    src={currentImage.original}
                     alt="Original"
                     fill
                     style={{ objectFit: 'contain' }}
@@ -309,7 +298,7 @@ export default function UploadZone() {
               <div className="relative border rounded-lg overflow-hidden border-divider dark:border-dark-divider group">
                 <div className="relative w-full aspect-square">
                   <Image
-                    src={currentImage.processed} // Use processed URL for the processed image
+                    src={currentImage.processed}
                     alt="Processed"
                     fill
                     style={{ objectFit: 'contain' }}
