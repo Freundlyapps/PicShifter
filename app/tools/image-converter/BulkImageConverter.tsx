@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
+import JSZip from 'jszip';
 
 interface PreviewImage {
   url: string;
@@ -120,6 +121,18 @@ export default function BulkImageConverter() {
     }
   }, [currentFiles, outputFormat]);
 
+  const dataURLtoBlob = (dataURL: string): Blob => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)?.[1] || '';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
+
   const downloadConvertedImage = useCallback((image: PreviewImage) => {
     const link = document.createElement('a');
     link.href = image.url;
@@ -129,11 +142,34 @@ export default function BulkImageConverter() {
     document.body.removeChild(link);
   }, []);
 
-  const downloadAllImages = useCallback(() => {
-    convertedImages.forEach(image => {
-      downloadConvertedImage(image);
-    });
-  }, [convertedImages, downloadConvertedImage]);
+  const downloadAllImages = useCallback(async () => {
+    try {
+      const zip = new JSZip();
+      
+      // Add each converted image to the zip file
+      for (const image of convertedImages) {
+        const blob = dataURLtoBlob(image.url);
+        zip.file(image.name, blob);
+      }
+      
+      // Generate the zip file
+      const content = await zip.generateAsync({ type: 'blob' });
+      
+      // Create a download link for the zip file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = `converted_images.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the URL object
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error('Error creating zip file:', error);
+      alert('Failed to create zip file. Please try again.');
+    }
+  }, [convertedImages]);
 
   return (
     <div className="bg-card rounded-lg p-6 shadow-sm">
@@ -222,7 +258,7 @@ export default function BulkImageConverter() {
                   onClick={downloadAllImages}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                 >
-                  Download All
+                  Download All as ZIP
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
