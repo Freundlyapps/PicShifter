@@ -8,9 +8,9 @@ export default function Footer() {
     {
       title: 'Tools',
       links: [
-        { name: 'Image Resize', href: '/resize' },
-        { name: 'Image Optimize', href: '/optimize' },
-        { name: 'PDF to Image', href: '/pdf-to-image' }
+        { name: 'Image Resize', href: '/tools/image-resizer' },
+        { name: 'Image Optimize', href: '/tools/image-optimizer' },
+        { name: 'PDF to Image', href: '/tools/pdf-to-image' }
       ]
     },
     {

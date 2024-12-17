@@ -25,13 +25,13 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/resize" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+            <Link href="/tools/image-resizer" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
               Resize
             </Link>
-            <Link href="/optimize" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+            <Link href="/tools/image-optimizer" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
               Optimize
             </Link>
-            <Link href="/convert" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
+            <Link href="/tools/image-converter" className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors">
               Convert
             </Link>
           </div>
@@ -68,21 +68,21 @@ export default function Header() {
           <nav className="py-4 border-t border-background/20 dark:border-dark-text/20">
             <div className="flex flex-col space-y-4">
               <Link 
-                href="/resize" 
+                href="/tools/image-resizer" 
                 className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Resize
               </Link>
               <Link 
-                href="/optimize" 
+                href="/tools/image-optimizer" 
                 className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Optimize
               </Link>
               <Link 
-                href="/convert" 
+                href="/tools/image-converter" 
                 className="text-background/90 dark:text-dark-text hover:text-white dark:hover:text-white transition-colors px-2"
                 onClick={() => setIsMenuOpen(false)}
               >
