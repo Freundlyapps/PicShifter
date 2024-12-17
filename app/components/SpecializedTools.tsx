@@ -13,8 +13,9 @@ const tools = [
     icon: FaFileImage,
     title: 'PDF to Image',
     description: 'Convert PDF pages to high-quality images',
-    link: '/tools/pdf-to-image',
+    link: 'https://pdftoimage.picshifter.com',
     color: 'bg-green-500',
+    external: true,
   },
   {
     icon: FaImage,
@@ -49,10 +50,19 @@ export default function SpecializedTools() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {tools.map((tool) => {
             const Icon = tool.icon;
+            const LinkComponent = tool.external ? 'a' : Link;
+            const linkProps = tool.external ? {
+              href: tool.link,
+              target: "_blank",
+              rel: "noopener"
+            } : {
+              href: tool.link
+            };
+            
             return (
-              <Link
+              <LinkComponent
                 key={tool.title}
-                href={tool.link}
+                {...linkProps}
                 className="group block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className={`${tool.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white`}>
@@ -64,7 +74,7 @@ export default function SpecializedTools() {
                 <p className="text-gray-600 dark:text-gray-300">
                   {tool.description}
                 </p>
-              </Link>
+              </LinkComponent>
             )
           })}
         </div>
