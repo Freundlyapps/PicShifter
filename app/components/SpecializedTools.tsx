@@ -12,7 +12,7 @@ const tools = [
   {
     icon: FaFileImage,
     title: 'PDF to Image',
-    description: 'Convert PDF pages to high-quality images',
+    description: 'Convert PDF pages to high-quality images. Visit our dedicated tool page now',
     link: 'https://pdftoimage.picshifter.com',
     color: 'bg-green-500',
     external: true,
