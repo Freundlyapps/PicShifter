@@ -49,39 +49,7 @@ export default function ImageOptimizer() {
     setCurrentFile(file);
   }, []);
 
-  const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    if (files.length === 0) return;
-
-    if (mode === 'single') {
-      const file = files[0];
-      if (!file.type.startsWith('image/')) {
-        alert('Please drop an image file (JPEG, PNG, WebP, or AVIF)');
-        return;
-      }
-      await processImage(file);
-    } else {
-      setTotalFiles(files.length);
-      await processBulkImages(files);
-    }
-  }, [mode, processImage]);
-
-  const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    if (mode === 'single') {
-      await processImage(files[0]);
-    } else {
-      setTotalFiles(files.length);
-      await processBulkImages(files);
-    }
-  }, [mode, processImage]);
-
-  const processBulkImages = async (files: File[]) => {
+  const processBulkImages = useCallback(async (files: File[]) => {
     setIsProcessing(true);
     setBulkImages([]);
     setProgress(0);
@@ -126,7 +94,39 @@ export default function ImageOptimizer() {
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [quality]);
+
+  const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    if (mode === 'single') {
+      const file = files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please drop an image file (JPEG, PNG, WebP, or AVIF)');
+        return;
+      }
+      await processImage(file);
+    } else {
+      setTotalFiles(files.length);
+      await processBulkImages(files);
+    }
+  }, [mode, processImage, processBulkImages]);
+
+  const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    if (mode === 'single') {
+      await processImage(files[0]);
+    } else {
+      setTotalFiles(files.length);
+      await processBulkImages(files);
+    }
+  }, [mode, processImage, processBulkImages]);
 
   const optimizeImage = useCallback(async () => {
     if (!currentFile) return;

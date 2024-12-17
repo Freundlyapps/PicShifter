@@ -15,6 +15,16 @@ const nextConfig = {
       sizeLimit: '10mb',
     },
     responseLimit: '12mb',
+  },
+  transpilePackages: ['canvas'],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false
+      };
+    }
+    return config;
   }
 }
 

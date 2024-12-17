@@ -117,7 +117,7 @@ export default function ImageResizer() {
             <p className="text-text dark:text-white">Drop the images here...</p>
           ) : (
             <div className="space-y-2">
-              <p className="text-text dark:text-white">Drag 'n' drop images here, or click to select files</p>
+              <p className="text-text dark:text-white">Drag &apos;n&apos; drop images here, or click to select files</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Maximum file size: 10MB</p>
             </div>
           )}
