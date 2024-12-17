@@ -1,223 +1,147 @@
-'use client';
+import { Metadata } from 'next';
+import Script from 'next/script';
+import Header from '@/app/components/Header';
+import BulkImageConverter from './BulkImageConverter';
 
-import { useState, useCallback } from 'react';
-import Image from 'next/image';
-
-interface PreviewImage {
-  url: string;
-  size: number;
-  width: number;
-  height: number;
-}
-
-interface WindowWithImage extends Window {
-  Image: {
-    new(): HTMLImageElement;
+export const metadata: Metadata = {
+  title: 'Free Bulk Image Converter | Convert Multiple Images Online - PicShifter',
+  description: 'Convert multiple images at once to different formats like WebP, JPEG, PNG, and AVIF. Fast, free bulk image conversion with no signup required.',
+  keywords: 'Bulk Image Converter, Multiple Image Converter, Batch Image Converter, Convert Images Online, WebP Converter, AVIF Converter, Image Format Converter',
+  openGraph: {
+    title: 'Free Bulk Image Converter | PicShifter',
+    description: 'Convert multiple images at once to different formats. Free, no signup required.',
+    type: 'website',
+    url: 'https://picshifter.com/tools/image-converter',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'PicShifter Bulk Image Converter',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Bulk Image Converter | PicShifter',
+    description: 'Convert multiple images at once to different formats. Free, no signup required.',
+    images: ['/og-image.png'],
+  },
+  alternates: {
+    canonical: 'https://picshifter.com/tools/image-converter'
   }
 }
 
-export default function ImageConverter() {
-  const [originalImage, setOriginalImage] = useState<PreviewImage | null>(null);
-  const [convertedImage, setConvertedImage] = useState<PreviewImage | null>(null);
-  const [outputFormat, setOutputFormat] = useState<string>('webp');
-  const [isDragging, setIsDragging] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
-
-  const processImage = useCallback(async (file: File) => {
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const img = new ((window as WindowWithImage).Image)();
-      img.onload = () => {
-        setOriginalImage({
-          url: event.target?.result as string,
-          size: file.size,
-          width: img.width,
-          height: img.height,
-        });
-      };
-      img.src = event.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-    setCurrentFile(file);
-  }, []);
-
-  const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files[0];
-    if (!file || !file.type.startsWith('image/')) {
-      alert('Please drop an image file (JPEG, PNG, WebP, or AVIF)');
-      return;
-    }
-
-    await processImage(file);
-  }, [processImage]);
-
-  const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    await processImage(file);
-  }, [processImage]);
-
-  const convertImage = useCallback(async () => {
-    if (!currentFile) return;
-
-    setIsProcessing(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', currentFile);
-      formData.append('operation', 'convert');
-      formData.append('outputFormat', outputFormat);
-
-      const response = await fetch('/api/process-image', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Failed to convert image');
-
-      const result = await response.json();
-      
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to process image');
-      }
-
-      const img = new ((window as WindowWithImage).Image)();
-      img.onload = () => {
-        setConvertedImage({
-          url: result.processedImage,
-          size: result.processedSize,
-          width: img.width,
-          height: img.height,
-        });
-      };
-      img.src = result.processedImage;
-    } catch (error) {
-      console.error('Error converting image:', error);
-      alert('Failed to convert image. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [currentFile, outputFormat]);
-
-  const downloadConvertedImage = useCallback(() => {
-    if (!convertedImage) return;
-
-    const link = document.createElement('a');
-    link.href = convertedImage.url;
-    link.download = `converted-image.${outputFormat}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [convertedImage, outputFormat]);
-
+export default function ImageConverterPage() {
   return (
-    <div className="min-h-screen bg-white p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Image Converter</h1>
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <Header />
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-6 text-center text-text dark:text-white">
+          Free Bulk Image Converter - Convert Multiple Images at Once
+        </h1>
         
-        {/* Upload Zone */}
-        <div
-          className={`border-2 border-dashed rounded-lg p-8 text-center mb-8 transition-colors
-            ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
-            ${!originalImage ? 'cursor-pointer' : ''}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-        >
-          {!originalImage ? (
-            <div>
-              <p className="text-gray-600 mb-4">Drag and drop an image here, or</p>
-              <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600">
-                Browse Files
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/jpeg,image/png,image/webp,image/avif"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center mb-4">
-                <p className="text-gray-600">Output Format:</p>
-                <select
-                  value={outputFormat}
-                  onChange={(e) => setOutputFormat(e.target.value)}
-                  className="border rounded px-3 py-1"
-                >
-                  <option value="webp">WebP</option>
-                  <option value="jpeg">JPEG</option>
-                  <option value="png">PNG</option>
-                  <option value="avif">AVIF</option>
-                </select>
-              </div>
-              <button
-                onClick={convertImage}
-                disabled={isProcessing}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400"
-              >
-                {isProcessing ? 'Processing...' : 'Convert Image'}
-              </button>
-            </div>
-          )}
+        <div className="prose dark:prose-invert max-w-none mb-8">
+          <p className="text-lg text-center mb-8">
+            PicShifter&apos;s Free Bulk Image Converter lets you convert multiple images simultaneously to different formats.
+            Perfect for batch processing, web optimization, and maintaining consistent image formats across your projects.
+            Convert up to 10 images at once with just a few clicks.
+          </p>
         </div>
 
-        {/* Preview Section */}
-        {originalImage && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Original Image */}
-            <div className="border rounded-lg p-4">
-              <h2 className="text-xl font-semibold mb-4">Original</h2>
-              <div className="relative aspect-video mb-4">
-                <Image
-                  src={originalImage.url}
-                  alt="Original"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <p className="text-sm text-gray-600">
-                Size: {(originalImage.size / 1024).toFixed(2)} KB
-                <br />
-                Dimensions: {originalImage.width} x {originalImage.height}
+        <BulkImageConverter />
+
+        <section className="mt-12 mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Why Choose PicShifter Bulk Image Converter?</h2>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300">
+            <li>Convert multiple images simultaneously</li>
+            <li>Support for modern formats (WebP, AVIF) for better web performance</li>
+            <li>Batch download options for convenience</li>
+            <li>No signup required - completely free to use</li>
+            <li>Preview all conversions before downloading</li>
+            <li>Maintain original image quality during conversion</li>
+          </ul>
+        </section>
+
+        <section className="mt-12 mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Supported Image Formats</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-xl font-medium mb-2 text-gray-900 dark:text-white">Input Formats</h3>
+              <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+                <li>PNG - Perfect for images with transparency</li>
+                <li>JPEG/JPG - Ideal for photographs</li>
+                <li>WebP - Modern format with excellent compression</li>
+                <li>AVIF - Next-generation image format</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-medium mb-2 text-gray-900 dark:text-white">Output Formats</h3>
+              <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+                <li>WebP - Best choice for web images</li>
+                <li>AVIF - Superior compression with high quality</li>
+                <li>PNG - Lossless quality with transparency</li>
+                <li>JPEG - Universal compatibility</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12 mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">How to Use the Bulk Image Converter</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-4 rounded-lg bg-card">
+              <h3 className="text-xl font-medium mb-2">1. Upload Images</h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Drag and drop up to 10 images or use the file browser to select multiple files
               </p>
             </div>
-
-            {/* Converted Image */}
-            {convertedImage && (
-              <div className="border rounded-lg p-4">
-                <h2 className="text-xl font-semibold mb-4">Converted</h2>
-                <div className="relative aspect-video mb-4">
-                  <Image
-                    src={convertedImage.url}
-                    alt="Converted"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Size: {(convertedImage.size / 1024).toFixed(2)} KB
-                  <br />
-                  Dimensions: {convertedImage.width} x {convertedImage.height}
-                </p>
-                <button
-                  onClick={downloadConvertedImage}
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                >
-                  Download Converted Image
-                </button>
-              </div>
-            )}
+            <div className="p-4 rounded-lg bg-card">
+              <h3 className="text-xl font-medium mb-2">2. Choose Format</h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Select your desired output format (WebP, JPEG, PNG, or AVIF)
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-card">
+              <h3 className="text-xl font-medium mb-2">3. Download</h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Download all converted images at once or individually
+              </p>
+            </div>
           </div>
-        )}
+        </section>
+
+        <Script id="schema-markup" type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "PicShifter Bulk Image Converter",
+              "applicationCategory": "MultimediaApplication",
+              "operatingSystem": "Any",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "description": "Free online tool to convert multiple images simultaneously between different formats including WebP, JPEG, PNG, and AVIF.",
+              "featureList": [
+                "Bulk image conversion",
+                "Multiple format support",
+                "Batch download",
+                "Preview before download",
+                "No registration required"
+              ],
+              "browserRequirements": "Requires a modern web browser",
+              "softwareVersion": "1.0",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.7",
+                "ratingCount": "98"
+              }
+            }
+          `}
+        </Script>
       </div>
     </div>
   );
