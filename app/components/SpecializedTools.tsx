@@ -39,7 +39,7 @@ export default function SpecializedTools() {
               <Link
                 key={tool.title}
                 href={tool.link}
-                className="group block p-6 bg-white dark:bg-dark-card rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="group block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className={`${tool.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white`}>
                   <Icon className="w-6 h-6" />
@@ -47,7 +47,7 @@ export default function SpecializedTools() {
                 <h3 className="text-xl font-semibold mb-2 text-text dark:text-white group-hover:text-primary">
                   {tool.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-500">
+                <p className="text-gray-600 dark:text-gray-300">
                   {tool.description}
                 </p>
               </Link>
