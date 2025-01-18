@@ -5,6 +5,7 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {
     unoptimized: true,
+    domains: ['picshifter.com', 'pdftoimage.picshifter.com', 'www.picshifter.com'],
   },
   trailingSlash: true,
   experimental: {
@@ -15,6 +16,80 @@ const nextConfig = {
       sizeLimit: '10mb',
     },
     responseLimit: '12mb',
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Link',
+            value: '<https://picshifter.com>; rel="canonical"'
+          }
+        ],
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        has: [
+          {
+            type: 'host',
+            value: 'www.picshifter.com',
+          },
+        ],
+        destination: 'https://picshifter.com',
+        permanent: true,
+      },
+      {
+        source: '/how-to-use',
+        destination: '/faq',
+        permanent: true,
+      },
+      {
+        source: '/convert-to-svg',
+        destination: '/tools/svg-converter',
+        permanent: true,
+      },
+      {
+        source: '/resize-image',
+        destination: '/resize',
+        permanent: true,
+      },
+      {
+        source: '/pdf-to-image',
+        destination: 'https://pdftoimage.picshifter.com',
+        permanent: true,
+      },
+      {
+        source: '/tools/pdf-to-image',
+        destination: 'https://pdftoimage.picshifter.com',
+        permanent: true,
+      },
+      {
+        source: '/tools/pdf-to-image/',
+        destination: 'https://pdftoimage.picshifter.com',
+        permanent: true,
+      }
+    ]
   },
   webpack: (config, { isServer }) => {
     // Correctly handle the canvas module

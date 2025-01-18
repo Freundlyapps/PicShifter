@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /*?*
 
+# Preferred domain declaration
+Host: picshifter.com
+
+# Main domain sitemap
 Sitemap: https://picshifter.com/sitemap.xml
+
+# Additional domains
+Host-meta: https://pdftoimage.picshifter.com
+
+# Explicitly disallow www subdomain to prevent duplicate content
+User-agent: *
+Disallow: /
+Host: www.picshifter.com

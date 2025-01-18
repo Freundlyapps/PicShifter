@@ -5,6 +5,9 @@ import Script from 'next/script';
 export const metadata = {
   metadataBase: new URL('https://picshifter.com'),
   title: 'Convert, Resize, and Optimize Images Online | PicShifter',
+  alternates: {
+    canonical: 'https://picshifter.com',
+  },
   description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
   keywords: 'image converter, image resize, online image optimization, PicShifter, image processing, free image tools',
   openGraph: {
@@ -59,6 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="canonical" href="https://picshifter.com" />
         <Script id="json-ld" type="application/ld+json">
           {`
             {
