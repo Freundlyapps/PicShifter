@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: 'Free Online Image Optimizer | PicShifter',
     description: 'Optimize and compress your images online without losing quality. Free, no signup required.',
     type: 'website',
-    url: 'https://picshifter.com/optimize',
+    url: 'https://picshifter.com/tools/image-optimizer',
     images: [
       {
         url: '/og-image.png',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://picshifter.com/optimize'
+    canonical: 'https://picshifter.com/tools/image-optimizer'
   }
 }
 
@@ -111,6 +111,7 @@ export default function OptimizePage() {
               ],
               "browserRequirements": "Requires a modern web browser",
               "softwareVersion": "1.0",
+              "url": "https://picshifter.com/tools/image-optimizer",
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
