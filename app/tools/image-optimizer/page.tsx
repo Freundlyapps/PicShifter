@@ -4,12 +4,12 @@ import Script from 'next/script'
 import Header from '../../components/Header'
 
 export const metadata: Metadata = {
-  title: 'Free Image Optimizer: Compress Online | PicShifter',
-  description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites. Free, no signup required.',
+  title: 'Free Image Compressor Online — Reduce Size 80% | PicShifter',
+  description: 'Compress JPG, PNG, WebP images up to 80% smaller without quality loss. Convert to WebP & AVIF for faster page loads. Free, instant, no signup.',
   keywords: 'image optimizer, compress images online, image compression, free image optimizer, WebP converter, AVIF converter, optimize images for web',
   openGraph: {
-    title: 'Free Image Optimizer: Compress Online | PicShifter',
-    description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites.',
+    title: 'Free Image Compressor Online — Reduce Size 80% | PicShifter',
+    description: 'Compress JPG, PNG, WebP images up to 80% smaller without quality loss. Convert to WebP & AVIF for faster page loads.',
     type: 'website',
     url: 'https://picshifter.com/tools/image-optimizer/',
     images: [
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Image Optimizer: Compress Online | PicShifter',
-    description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites.',
+    title: 'Free Image Compressor Online — Reduce Size 80% | PicShifter',
+    description: 'Compress JPG, PNG, WebP images up to 80% smaller without quality loss. Convert to WebP & AVIF for faster page loads.',
     images: ['/og-image.png'],
   },
   alternates: {

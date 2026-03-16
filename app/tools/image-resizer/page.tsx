@@ -4,12 +4,12 @@ import Script from 'next/script'
 import Header from '../../components/Header'
 
 export const metadata: Metadata = {
-  title: 'Free Bulk Image Resizer Online | PicShifter',
-  description: 'Resize images in bulk free online — no quality loss. Presets for web and social media. Supports JPG, PNG, WebP, AVIF. Fast and easy.',
+  title: 'Free Image Resizer Online — Bulk Resize JPG/PNG/WebP | PicShifter',
+  description: 'Resize single or bulk images free online. Social media presets, custom dimensions, no quality loss. Supports JPG, PNG, WebP, AVIF. No signup.',
   keywords: 'image resizer, bulk image resizer, resize images online, free image resize, resize JPG, resize PNG, social media image resizer',
   openGraph: {
-    title: 'Free Bulk Image Resizer Online | PicShifter',
-    description: 'Resize images in bulk free online — no quality loss. Presets for web and social media.',
+    title: 'Free Image Resizer Online — Bulk Resize JPG/PNG/WebP | PicShifter',
+    description: 'Resize single or bulk images free online. Social media presets, custom dimensions, no quality loss.',
     type: 'website',
     url: 'https://picshifter.com/tools/image-resizer/',
     images: [
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Bulk Image Resizer Online | PicShifter',
-    description: 'Resize images in bulk free online — no quality loss. Presets for web and social media.',
+    title: 'Free Image Resizer Online — Bulk Resize JPG/PNG/WebP | PicShifter',
+    description: 'Resize single or bulk images free online. Social media presets, custom dimensions, no quality loss.',
     images: ['/og-image.png'],
   },
   alternates: {
