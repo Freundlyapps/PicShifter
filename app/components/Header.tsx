@@ -94,7 +94,7 @@ export default function Header() {
 
         {/* Header Content */}
         <div className="py-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-background dark:text-dark-text">PicShifter</h1>
+          <p className="text-4xl md:text-5xl font-bold mb-4 text-background dark:text-dark-text">PicShifter</p>
           <p className="text-xl mb-4 text-background dark:text-dark-text">
             Convert and Enhance Your Images Instantly 
           </p>

@@ -4,14 +4,14 @@ import Script from 'next/script'
 import Header from '../components/Header'
 
 export const metadata: Metadata = {
-  title: 'Free Online Image Resizer | Resize Images in Bulk or Custom Sizes - PicShifter',
-  description: 'Easily resize single or multiple images online with PicShifter. Use preset dimensions or custom sizes for social media, web, or print. Fast, free, and no signup required.',
-  keywords: 'Image Resizer, Bulk Image Resizer, Free Image Resize Tool, Resize Images Online, Resize PNG, Resize JPEG, Social Media Image Resizer',
+  title: 'Free Bulk Image Resizer Online | PicShifter',
+  description: 'Resize images in bulk free online — no quality loss. Presets for web and social media. Supports JPG, PNG, WebP, AVIF. Fast and easy.',
+  keywords: 'image resizer, bulk image resizer, resize images online, free image resize, resize JPG, resize PNG, social media image resizer',
   openGraph: {
-    title: 'Free Online Image Resizer | PicShifter',
-    description: 'Resize single or multiple images online instantly. Free, no signup required.',
+    title: 'Free Bulk Image Resizer Online | PicShifter',
+    description: 'Resize images in bulk free online — no quality loss. Presets for web and social media.',
     type: 'website',
-    url: 'https://picshifter.com/resize',
+    url: 'https://picshifter.com/tools/image-resizer/',
     images: [
       {
         url: '/og-image.png',
@@ -23,12 +23,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Online Image Resizer | PicShifter',
-    description: 'Resize single or multiple images online instantly. Free, no signup required.',
+    title: 'Free Bulk Image Resizer Online | PicShifter',
+    description: 'Resize images in bulk free online — no quality loss. Presets for web and social media.',
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://picshifter.com/resize'
+    canonical: 'https://picshifter.com/tools/image-resizer/'
+  },
+  robots: {
+    index: false,
+    follow: false
   }
 }
 
@@ -38,14 +42,13 @@ export default function ResizePage() {
       <Header />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-6 text-center text-text dark:text-white">
-          Free Online Image Resizer - Single & Bulk Resizing
+          Free Bulk Image Resizer: Resize JPG/PNG/WebP Online
         </h1>
-        
+
         <div className="prose dark:prose-invert max-w-none mb-8">
           <p className="text-lg text-center mb-8">
-            PicShifter&apos;s Free Online Image Resizer allows you to resize images quickly and easily. 
-            Choose from preset sizes for social media (Facebook Cover, Instagram Post) or enter custom dimensions. 
-            Resize bulk images without losing quality and download them in PNG, JPEG, WebP, or AVIF formats.
+            Resize single or multiple images online instantly with PicShifter&apos;s free bulk image resizer.
+            Choose from social media presets or enter custom dimensions. No signup, no quality loss.
           </p>
         </div>
 
@@ -100,21 +103,17 @@ export default function ResizePage() {
                 "price": "0",
                 "priceCurrency": "USD"
               },
-              "description": "Free online tool to resize single or multiple images with custom dimensions and various output formats.",
+              "url": "https://picshifter.com/tools/image-resizer/",
+              "description": "Free online bulk image resizer — resize single or multiple images with custom dimensions and social media presets.",
               "featureList": [
                 "Bulk image resizing",
                 "Custom dimensions",
-                "Multiple output formats",
                 "Social media presets",
+                "PNG, JPEG, WebP, AVIF output",
                 "No registration required"
               ],
               "browserRequirements": "Requires a modern web browser",
-              "softwareVersion": "1.0",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "156"
-              }
+              "softwareVersion": "1.0"
             }
           `}
         </Script>

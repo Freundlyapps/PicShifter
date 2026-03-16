@@ -17,6 +17,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (isNaN(width) || isNaN(height) || width < 1 || height < 1) {
+      return NextResponse.json(
+        { error: 'Invalid dimensions provided' },
+        { status: 400 }
+      );
+    }
+
     const zip = new JSZip();
 
     // Process each image

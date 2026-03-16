@@ -10,12 +10,7 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     mdxRs: true,
-  },
-  serverRuntimeConfig: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-    responseLimit: '12mb',
+    serverComponentsExternalPackages: ['potrace'],
   },
   async headers() {
     return [
@@ -37,10 +32,6 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block'
-          },
-          {
-            key: 'Link',
-            value: '<https://picshifter.com>; rel="canonical"'
           }
         ],
       },
@@ -71,7 +62,7 @@ const nextConfig = {
       },
       {
         source: '/resize-image',
-        destination: '/resize',
+        destination: '/tools/image-resizer',
         permanent: true,
       },
       {

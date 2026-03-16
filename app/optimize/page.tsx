@@ -4,14 +4,14 @@ import Script from 'next/script'
 import Header from '../components/Header'
 
 export const metadata: Metadata = {
-  title: 'Free Online Image Optimizer | Compress Images Without Losing Quality - PicShifter',
-  description: 'Optimize and compress your images online without losing quality. Convert to modern formats like WebP and AVIF. Fast, free, and no signup required.',
-  keywords: 'Image Optimizer, Image Compression, Free Image Optimizer, Compress Images Online, WebP Converter, AVIF Converter, Image Quality Optimizer',
+  title: 'Free Image Optimizer: Compress Online | PicShifter',
+  description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites. Free, no signup required.',
+  keywords: 'image optimizer, compress images online, image compression, free image optimizer, WebP converter, AVIF converter, optimize images for web',
   openGraph: {
-    title: 'Free Online Image Optimizer | PicShifter',
-    description: 'Optimize and compress your images online without losing quality. Free, no signup required.',
+    title: 'Free Image Optimizer: Compress Online | PicShifter',
+    description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites.',
     type: 'website',
-    url: 'https://picshifter.com/tools/image-optimizer',
+    url: 'https://picshifter.com/tools/image-optimizer/',
     images: [
       {
         url: '/og-image.png',
@@ -23,12 +23,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Online Image Optimizer | PicShifter',
-    description: 'Optimize and compress your images online without losing quality. Free, no signup required.',
+    title: 'Free Image Optimizer: Compress Online | PicShifter',
+    description: 'Compress and optimize images online without losing quality. Convert to WebP, AVIF for faster websites.',
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://picshifter.com/tools/image-optimizer'
+    canonical: 'https://picshifter.com/tools/image-optimizer/'
+  },
+  robots: {
+    index: false,
+    follow: false
   }
 }
 
@@ -38,15 +42,13 @@ export default function OptimizePage() {
       <Header />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-6 text-center text-text dark:text-white">
-          Free Online Image Optimizer - Smart Compression
+          Free Image Optimizer: Compress Without Quality Loss
         </h1>
-        
+
         <div className="prose dark:prose-invert max-w-none mb-8">
           <p className="text-lg text-center mb-8">
-            PicShifter&apos;s Free Online Image Optimizer helps you compress images intelligently while maintaining quality. 
-            optimize images with customizable quality settings. 
-            Perfect for web images, email attachments, and social media uploads.
-            
+            Compress and optimize your images online with PicShifter&apos;s free image optimizer.
+            Reduce file sizes while maintaining visual quality. Convert to WebP and AVIF for faster websites. No signup required.
           </p>
         </div>
 
@@ -101,22 +103,17 @@ export default function OptimizePage() {
                 "price": "0",
                 "priceCurrency": "USD"
               },
-              "description": "Free online tool to optimize and compress images while maintaining quality, with support for modern formats like WebP and AVIF.",
+              "url": "https://picshifter.com/tools/image-optimizer/",
+              "description": "Free online image optimizer — compress images without losing quality. Convert to WebP and AVIF for faster websites.",
               "featureList": [
                 "Smart image compression",
-                "Modern format conversion",
-                "Quality control",
+                "WebP and AVIF conversion",
+                "Adjustable quality slider",
                 "Before/after preview",
                 "No registration required"
               ],
               "browserRequirements": "Requires a modern web browser",
-              "softwareVersion": "1.0",
-              "url": "https://picshifter.com/tools/image-optimizer",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "142"
-              }
+              "softwareVersion": "1.0"
             }
           `}
         </Script>

@@ -6,9 +6,6 @@ const redirects = new Map([
   ['/optimize', '/tools/image-optimizer'],
   ['/resize', '/tools/image-resizer'],
   ['/convert', '/tools/image-converter'],
-  ['/resize-image', '/resize'],
-  ['/convert-to-svg', '/tools/svg-converter'],
-  ['/how-to-use', '/faq'],
   ['/pdf-to-image', 'https://pdftoimage.picshifter.com'],
   ['/tools/pdf-to-image', 'https://pdftoimage.picshifter.com']
 ]);
@@ -28,11 +25,10 @@ export function middleware(request: NextRequest) {
     const newUrl = new URL(request.url);
     newUrl.protocol = 'https:';
     newUrl.host = hostname.replace('www.', '');
-    return NextResponse.redirect(newUrl, { 
+    return NextResponse.redirect(newUrl, {
       status: 301,
       headers: {
-        'Cache-Control': 'public, max-age=31536000',
-        'Link': '<https://picshifter.com>; rel="canonical"'
+        'Cache-Control': 'public, max-age=31536000'
       }
     });
   }
@@ -73,9 +69,6 @@ export const config = {
     '/optimize',
     '/resize',
     '/convert',
-    '/resize-image',
-    '/convert-to-svg',
-    '/how-to-use',
     '/pdf-to-image',
     '/tools/pdf-to-image',
     // Keep API routes for CORS

@@ -4,14 +4,14 @@ import Header from '@/app/components/Header';
 import BulkImageConverter from './BulkImageConverter';
 
 export const metadata: Metadata = {
-  title: 'Free Bulk Image Converter | Convert Multiple Images Online - PicShifter',
-  description: 'Convert multiple images at once to different formats like WebP, JPEG, PNG, and AVIF. Fast, free bulk image conversion with no signup required.',
+  title: 'Free Bulk Image Converter Online | PicShifter',
+  description: 'Convert multiple images at once to WebP, JPEG, PNG, and AVIF. Fast, free bulk image conversion with no signup required.',
   keywords: 'Bulk Image Converter, Multiple Image Converter, Batch Image Converter, Convert Images Online, WebP Converter, AVIF Converter, Image Format Converter',
   openGraph: {
     title: 'Free Bulk Image Converter | PicShifter',
     description: 'Convert multiple images at once to different formats. Free, no signup required.',
     type: 'website',
-    url: 'https://picshifter.com/tools/image-converter',
+    url: 'https://picshifter.com/tools/image-converter/',
     images: [
       {
         url: '/og-image.png',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://picshifter.com/tools/image-converter'
+    canonical: 'https://picshifter.com/tools/image-converter/'
   }
 }
 
@@ -124,21 +124,17 @@ export default function ImageConverterPage() {
                 "price": "0",
                 "priceCurrency": "USD"
               },
-              "description": "Free online tool to convert multiple images simultaneously between different formats including WebP, JPEG, PNG, and AVIF.",
+              "url": "https://picshifter.com/tools/image-converter/",
+              "description": "Free online bulk image converter — convert multiple images between WebP, JPEG, PNG, and AVIF formats simultaneously.",
               "featureList": [
                 "Bulk image conversion",
-                "Multiple format support",
+                "WebP, JPEG, PNG, AVIF support",
                 "Batch download",
                 "Preview before download",
                 "No registration required"
               ],
               "browserRequirements": "Requires a modern web browser",
-              "softwareVersion": "1.0",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.7",
-                "ratingCount": "98"
-              }
+              "softwareVersion": "1.0"
             }
           `}
         </Script>

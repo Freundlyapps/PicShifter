@@ -4,15 +4,15 @@ import Script from 'next/script';
 
 export const metadata = {
   metadataBase: new URL('https://picshifter.com'),
-  title: 'Convert, Resize, and Optimize Images Online | PicShifter',
+  title: 'PicShifter: Free Image Tools — Convert, Resize, Optimize',
   alternates: {
     canonical: 'https://picshifter.com',
   },
-  description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
-  keywords: 'image converter, image resize, online image optimization, PicShifter, image processing, free image tools',
+  description: 'Free online image tools: SVG converter, bulk resizer, optimizer. Convert, resize, and compress images instantly. No signup, no data stored.',
+  keywords: 'image converter, SVG converter, image resizer, image optimizer, free image tools, PicShifter, convert image to SVG, bulk image resizer',
   openGraph: {
-    title: 'Convert, Resize, and Optimize Images Online | PicShifter',
-    description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
+    title: 'PicShifter: Free Image Tools — Convert, Resize, Optimize',
+    description: 'Free online image tools: SVG converter, bulk resizer, optimizer. Convert, resize, and compress images instantly. No signup, no data stored.',
     type: 'website',
     url: 'https://picshifter.com',
     images: [
@@ -26,8 +26,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Convert, Resize, and Optimize Images Online | PicShifter',
-    description: 'Free online tool to convert, resize, grayscale, and blur your images instantly. No signup required, secure processing with no data storage.',
+    title: 'PicShifter: Free Image Tools — Convert, Resize, Optimize',
+    description: 'Free online image tools: SVG converter, bulk resizer, optimizer. No signup, no data stored.',
     images: ['/twitter-image.png'],
   },
   robots: {
@@ -62,7 +62,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="canonical" href="https://picshifter.com" />
         <Script id="json-ld" type="application/ld+json">
           {`
             {
@@ -70,22 +69,21 @@ export default function RootLayout({
               "@type": "WebApplication",
               "name": "PicShifter",
               "url": "https://picshifter.com",
-              "description": "Convert, resize, grayscale, and blur your images online for free with PicShifter.",
-              "applicationCategory": "Image Processing Tool",
+              "description": "Free online image tools: SVG converter, bulk image resizer, image optimizer, and format converter. No signup required.",
+              "applicationCategory": "MultimediaApplication",
               "operatingSystem": "Any",
               "offers": {
                 "@type": "Offer",
                 "price": "0",
-                "priceCurrency": "USD",
-                "category": "Free"
+                "priceCurrency": "USD"
               },
               "featureList": [
-                "Image format conversion",
-                "Image resizing",
-                "Grayscale conversion",
-                "Blur effect",
+                "SVG conversion (JPG/PNG to SVG)",
+                "Bulk image resizing",
+                "Image compression and optimization",
+                "Format conversion (WebP, AVIF, PNG, JPEG)",
                 "No registration required",
-                "No data storage"
+                "Privacy-first — no data storage"
               ]
             }
           `}

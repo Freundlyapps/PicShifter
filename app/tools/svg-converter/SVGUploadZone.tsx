@@ -97,7 +97,7 @@ export default function SVGUploadZone({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={() => document.getElementById('fileInput')?.click()}
+      onClick={() => { if (!isProcessing) document.getElementById('svgFileInput')?.click() }}
     >
       <div className="text-text dark:text-dark-text">
         <p className="text-lg mb-2">{isProcessing ? processingText : text}</p>
@@ -106,7 +106,7 @@ export default function SVGUploadZone({
         </p>
       </div>
       <input
-        id="fileInput"
+        id="svgFileInput"
         type="file"
         className="hidden"
         accept={accept.join(',')}
