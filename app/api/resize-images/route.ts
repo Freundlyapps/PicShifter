@@ -32,11 +32,10 @@ export async function POST(request: Request) {
       const buffer = Buffer.from(await file.arrayBuffer());
       
       let sharpInstance = sharp(buffer)
-        .resize({
-          width,
-          height,
-          fit: 'contain',
-          background: { r: 255, g: 255, b: 255, alpha: 0 }
+        .resize(width, height, {
+          fit: 'fill',
+          withoutEnlargement: false,
+          background: { r: 255, g: 255, b: 255, alpha: 1 }
         });
 
       // Apply format-specific options
