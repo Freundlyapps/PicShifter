@@ -20,6 +20,10 @@ const outputFormats = [
   { value: 'avif', label: 'AVIF - Next-gen format, best compression' },
 ];
 
+// Netlify Functions cap the request/response payload at ~6MB; keep the combined
+// upload under 5MB so bulk requests stay within that limit.
+const MAX_TOTAL_BYTES = 5 * 1024 * 1024; // 5MB
+
 export default function ImageResizer() {
   const [files, setFiles] = useState<File[]>([]);
   const [width, setWidth] = useState<number | ''>('');
@@ -48,7 +52,7 @@ export default function ImageResizer() {
     accept: {
       'image/*': []
     },
-    maxSize: 10485760 // 10MB
+    maxSize: MAX_TOTAL_BYTES // per-file cap; combined total is validated on resize
   });
 
   const handlePresetClick = (preset: { width: number; height: number }) => {
@@ -64,6 +68,14 @@ export default function ImageResizer() {
   const handleResize = async () => {
     if (!files.length || !width || !height) {
       setMessage('Please upload images and enter dimensions.');
+      return;
+    }
+
+    const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+    if (totalBytes > MAX_TOTAL_BYTES) {
+      setMessage(
+        `Total size is ${(totalBytes / 1024 / 1024).toFixed(1)}MB. Please keep all images under 5MB combined, or resize fewer at a time.`
+      );
       return;
     }
 
@@ -118,7 +130,7 @@ export default function ImageResizer() {
           ) : (
             <div className="space-y-2">
               <p className="text-text dark:text-white">Drag &apos;n&apos; drop images here, or click to select files</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Maximum file size: 10MB</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Up to 5MB total across all images</p>
             </div>
           )}
         </div>
